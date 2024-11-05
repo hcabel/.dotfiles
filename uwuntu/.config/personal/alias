@@ -1,3 +1,5 @@
-# alias vim="neovide"
-# alias nvim="neovide"
+alias vim="neovide"
+alias nvim="neovide"
+
+alias dotfiles="cd $DOTFILES"
 
