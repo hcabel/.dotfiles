@@ -100,9 +100,9 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-set $wsp1 "󰈹 1"
-set $wsp3 " 3"
-set $wsp4 " 4"
+set $wsp1 "1󰈹 "
+set $wsp3 "3 "
+set $wsp4 "4 "
 
 # # switch to workspace
 bindsym $mod+1 workspace $wsp1
@@ -251,6 +251,12 @@ bindsym $mod+p move workspace to output right
 
 # Lock screen
 bindsym $mod+shift+x exec i3lock
+
+# Background
+exec feh --bg-scale ~/Pictures/wallpaper.jpg
+
+# Transparent terminal
+exec --no-startup-id compton
 
 # Startup app
 exec firefox
