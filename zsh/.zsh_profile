@@ -18,6 +18,9 @@ bindkey -s ^f "tmux-sessionizer\n"
 # Couldn't figure out how to remove . and ..
 # setopt globdots
 
+# restaure tmux session
+tmux start-server
+
 catr() {
     tail -n "+$1" $3 | head -n "$(($2 - $1 + 1))"
 }
