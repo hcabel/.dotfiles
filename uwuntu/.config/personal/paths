@@ -1,4 +1,0 @@
-addToPath $HOME/.cargo/bin
-addToPath $HOME/.rustup
-addToPath /opt/nvim-linux64/bin
-
