@@ -50,6 +50,9 @@
 				".* — Mozilla Firefox": " Mozilla Firefox",
 				".*Discord": " Discord",
 				"(.*) - .* - Obsidian.*": "󱩼 Obsidian - $1",
+				".* YouTube — Zen Browser": " Youtube - Zen Browser",
+				".* Gmail — Zen Browser": "󰊫 Gmail - Zen Browser",
+				".* — Zen Browser": " Zen Browser",
 			},
 		},
 		"custom/notification": {
