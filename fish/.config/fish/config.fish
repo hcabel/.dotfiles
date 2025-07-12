@@ -134,6 +134,7 @@ abbr ... 'cd ../..'
 abbr .3 'cd ../../..'
 abbr .4 'cd ../../../..'
 abbr .5 'cd ../../../../..'
+abbr reload-waybar 'kill waybar && waybar & disown'
 
 bind ctrl-d 'exit'
 bind ctrl-enter 'echo "
