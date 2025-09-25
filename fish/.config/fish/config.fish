@@ -131,10 +131,13 @@ set fish_autosuggestion_enabled 0
 
 abbr .. 'cd ..'
 abbr ... 'cd ../..'
+abbr .2 'cd ../..'
+abbr .... 'cd ../../..'
 abbr .3 'cd ../../..'
 abbr .4 'cd ../../../..'
 abbr .5 'cd ../../../../..'
 abbr reload-waybar 'kill waybar && waybar & disown'
+abbr nvim 'nvim .'
 
 bind ctrl-d 'exit'
 bind ctrl-enter 'echo "
