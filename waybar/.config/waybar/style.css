@@ -8,6 +8,12 @@
     font-size: 15px;
 }
 
+.modules-left,
+.modules-right,
+.modules-center {
+    margin-top: 10px;
+}
+
 .modules-left {
     margin-left: 8px;
 }
@@ -29,7 +35,7 @@
 #custom-screenrecording-indicator,
 #custom-update {
     margin: 0px 2px;
-    padding: 0px 10px;
+    padding: 3px 15px;
     border-radius: 5px;
 
     min-width: 12px;
