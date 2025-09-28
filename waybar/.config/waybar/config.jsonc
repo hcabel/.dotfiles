@@ -52,7 +52,9 @@
     },
     "hyprland/window": {
       "rewrite": {
+        "": "( •◡-)-♡ 🍡",
         "Kitty": " Kitty",
+        "hcabel@omarchy:(.*)": " $1",
         "nvim.*": " NeoVim",
         ".* — Mozilla Firefox": " Mozilla Firefox",
         ".*Discord": " Discord",
