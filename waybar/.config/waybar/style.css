@@ -32,14 +32,17 @@
 #workspaces,
 #window,
 #clock,
-#custom-screenrecording-indicator,
-#custom-update {
+#custom-screenrecording-indicator {
     margin: 0px 2px;
     padding: 3px 15px;
     border-radius: 5px;
 
     min-width: 12px;
     background-color: alpha(@background, .6);
+}
+
+#custom-update {
+    padding: 3px 5px;
 }
 
 #tray:hover,
