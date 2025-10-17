@@ -3,28 +3,7 @@ if status is-interactive
 end
 
 function fish_greeting
-# printf '
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⡷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠋⠈⠻⣮⣳⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⡿⠋⠀⠀⠀⠀⠙⣿⣿⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣿⡿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠈⠛⠛⠿⠿⣿⣷⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣾⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠻⠿⣿⣶⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-#      ⠀⠀⠀⣀⣠⣤⣤⣀⡀⠀⠀⣀⣴⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣄⠀⠀
-#      ⢀⣤⣾⡿⠟⠛⠛⢿⣿⣶⣾⣿⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⣷⣦⣀⣀⣤⣶⣿⡿⠿⢿⣿⡀⠀
-#      ⣿⣿⠏⠀⢰⡆⠀⠀⠉⢿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢿⡿⠟⠋⠁⠀⠀⢸⣿⠇⠀
-#      ⣿⡟⠀⣀⠈⣀⡀⠒⠃⠀⠙⣿⡆⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠇⠀
-#      ⣿⡇⠀⠛⢠⡋⢙⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀
-#      ⣿⣧⠀⠀⠀⠓⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠋⠀⠀⢸⣧⣤⣤⣶⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⡿⠀⠀
-#      ⣿⣿⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠻⣷⣶⣶⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⠁⠀⠀
-#      ⠈⠛⠻⠿⢿⣿⣷⣶⣦⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⡏⠀⠀⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠻⠿⢿⣿⣷⣶⣦⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⡄⠀⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠛⠻⠿⢿⣿⣷⣶⣦⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⡄⠀
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠿⠿⣿⣷⣶⣶⣤⣤⣀⡀⠀⠀⠀⢀⣴⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⡿⣄
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠿⠿⣿⣷⣶⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣹
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀⠀⠀⠀⠀⠀⢸⣧
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣆⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⣶⣾⣿⣿⣿⣿⣤⣄⣀⡀⠀⠀⠀⣿
-#      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣻⣷⣶⣾⣿⣿⡿⢯⣛⣛⡋⠁⠀⠀⠉⠙⠛⠛⠿⣿⣿⡷⣶⣿
-# '
+set_color --bold
 printf '
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠜⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡜⠁⠀⠀⠘⢳⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -57,41 +36,45 @@ printf '
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠻⠿⠿⠿⠟⠛⠛⠻⠿⠟⠛⠉⠙⠛⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⠚⠒⠋⠙⠓⠶⠤⠖⠓⠢⠦⠤⠤⠤⠖⠒⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 '
 end
+set_color reset
+
+set -g rainbow_color_index 1
+set -g rainbow_colors \
+    '#55FF55' \
+    '#33FFBB' \
+    '#00DDFF' \
+    '#3399FF' \
+    '#5D5DFF' \
+    '#AA55FF' \
+    '#FF55FF' \
+    '#FF77AA' \
+    '#FF9999' \
+    '#FF5555' \
+    '#FF884D' \
+    '#FFBB33' \
+    '#FFFF55' \
+    '#B6FF5D' \
+
+set -g rainbow_color_count (count $rainbow_colors)
 
 function fish_prompt
-	set base           191724
-	set surface        1f1d2e
-	set overlay        26233a
-	set muted          6e6a86
-	set subtle         908caa
-	set text           e0def4
-	set love           eb6f92
-	set gold           f6c177
-	set rose           ebbcba
-	set pine           31748f
-	set foam           9ccfd8
-	set iris           c4a7e7
-	set highlightLow   21202e
-	set highlightMed   403d52
-	set highlightHigh  524f67
-
 	set -g fish_prompt_pwd_dir_length 0 # No path shortening
 
 	## INTERACTION
-	set -g fish_color_error reset
-	set -g fish_color_command $gold --bold
-	set -g fish_color_keyword reset
-	set -g fish_color_quote $iris
-	set -g fish_color_end $love
-	set -g fish_color_param reset
-	set -g fish_color_valid_path $foam --italics
-	set -g fish_color_option $muted
+	# set -g fish_color_error reset
+	# set -g fish_color_command $gold --bold
+	# set -g fish_color_keyword reset
+	# set -g fish_color_quote $iris
+	# set -g fish_color_end $love
+	# set -g fish_color_param reset
+	# set -g fish_color_valid_path $foam --italics
+	# set -g fish_color_option $muted
 
 	## GIT
 	set -g __fish_git_prompt_showupstream auto
 	set -g __fish_git_prompt_show_informative_status 1
 	set -g __fish_git_prompt_hide_untrackedfiles 1
-	set -g __fish_git_prompt_color_branch $love --bold
+	set -g __fish_git_prompt_color_branch --bold '#EB6F92'
 	set -g __fish_git_prompt_showupstream "informative"
 	set -g __fish_git_prompt_char_upstream_ahead ""
 	set -g __fish_git_prompt_char_upstream_behind ""
@@ -102,31 +85,28 @@ function fish_prompt
 	set -g __fish_git_prompt_char_untrackedfiles "…"
 	set -g __fish_git_prompt_char_conflictedstate "✖"
 	set -g __fish_git_prompt_char_cleanstate "✔"
-	set -g __fish_git_prompt_color_dirtystate $pine
-	set -g __fish_git_prompt_color_stagedstate $gold
-	set -g __fish_git_prompt_color_invalidstate $love
+	set -g __fish_git_prompt_color_dirtystate '#9ccfd8'
+	set -g __fish_git_prompt_color_stagedstate '#f6c177'
+	set -g __fish_git_prompt_color_invalidstate '#EB6F92'
 	set -g __fish_git_prompt_color_untrackedfiles $fish_color_normal
 	set -g __fish_git_prompt_color_cleanstate green --bold
 
-	set section_1 $surface
-	set section_2 $pine
+	printf '%s' (set_color $fish_color_autosuggestion) (date '+%H:%M:%S')
+    set_color reset
 
-    printf '%s %s%s%s%s%s%s\n' \
-		(set_color $foam --background $section_1)        $USER        (set_color $section_1 --background $section_2) \
-		(set_color $text --bold --background $section_2) (prompt_pwd) (set_color $section_2 --background normal) \
-		(fish_git_prompt %s)
-	printf ' %s%s ' (set_color $fish_color_cwd) (set_color reset)
+    set -g rainbow_color_index (math "$rainbow_color_index % $rainbow_color_count + 1")
+    set -l rainbow_color $rainbow_colors[$rainbow_color_index]
+	printf '%s ' (set_color $rainbow_color) $USER
+    set_color reset
+
+	printf '%s' (set_color --bold $fish_color_normal) (prompt_pwd)
+    set_color reset
+
+	printf '%s ' (fish_git_prompt)
+
+    set_color reset
+	printf '%s%s ' (set_color $fish_color_cwd) (set_color reset)
 end
-
-function fish_right_prompt -d "Write out the right prompt"
-	set surface        1f1d2e
-	set pine           31748f
-	set_color --italics $pine --background $surface
-    date '+%H:%M:%S'
-	set_color reset
-end
-
-set fish_autosuggestion_enabled 0
 
 # Directories
 abbr .. 'cd ..'
@@ -136,6 +116,8 @@ abbr .... 'cd ../../..'
 abbr .3 'cd ../../..'
 abbr .4 'cd ../../../..'
 abbr .5 'cd ../../../../..'
+
+abbr lg 'lazygit'
 
 # File system
 alias ls='eza -lh --group-directories-first --icons=auto'
