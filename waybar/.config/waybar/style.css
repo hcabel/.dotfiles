@@ -106,7 +106,7 @@ tooltip {
 }
 
 #workspaces button.empty {
-    opacity: 0.4;
+    opacity: 0.25;
 }
 
 #workspaces button.active {

@@ -26,7 +26,7 @@
         "format": "{icon}",
         "format-icons": {
             "default": "",
-            "active": "󱓻",
+            "active": "🍡",
             "empty": "󰒲"
         },
         "persistent-workspaces": {
