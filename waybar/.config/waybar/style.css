@@ -31,8 +31,7 @@
 #custom-omarchy,
 #workspaces,
 #window,
-#clock,
-#custom-screenrecording-indicator {
+#clock {
     margin: 0px 2px;
     padding: 3px 15px;
     border-radius: 5px;
@@ -83,6 +82,7 @@ tooltip {
 }
 
 #custom-screenrecording-indicator {
+    padding: 0px 5px;
     min-width: 12px;
     font-size: 10px;
 }
