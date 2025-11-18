@@ -1,0 +1,6 @@
+[Unit]
+Description=Enables/disables the buildin display when connecting/disconnecting an second display.
+
+[Service]
+Type=oneshot
+ExecStart=/home/hcabel/.local/share/omarchy/bin/omarchy-display-switcher
