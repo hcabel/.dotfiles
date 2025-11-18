@@ -1,6 +1,3 @@
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
 
 function fish_greeting
 set_color --bold
@@ -118,6 +115,7 @@ abbr .4 'cd ../../../..'
 abbr .5 'cd ../../../../..'
 
 abbr lg 'lazygit'
+abbr rm 'rm -rf'
 
 # File system
 alias ls='eza -lh --group-directories-first --icons=auto'
@@ -136,9 +134,26 @@ function cd
 end
 
 # Git
-alias g='git'
+abbr g 'git'
 alias gcm='git commit -m'
 alias gcam='git commit -a -m'
 alias gcad='git commit -a --amend'
 
 zoxide init fish | source
+
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
+alias ffplay='ffplay -hide_banner'
+
+alias go='grc go'
+
+function colast
+    set commit_hash $(git log -n 1 --pretty=format:"%H")
+    set commit_message $(git log -n 1 --pretty=format:"%s")
+    git checkout $commit_hash > /dev/null 2>&1
+    echo "Checked out commit: $commit_hash - $commit_message"
+end
+
+function bdiff
+    git diff --no-index -- $argv[1] $argv[2] | diff-so-fancy
+end

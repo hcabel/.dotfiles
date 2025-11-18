@@ -53,6 +53,8 @@
     "hyprland/window": {
       "rewrite": {
         "": "( •◡-)-♡ 🍡",
+        "AIVE Backoffice": " Backoffice",
+        "Aive.*": " Aive",
         "Kitty": " Kitty",
         "hcabel@omarchy:(.*)": " $1",
         "nvim.*": " NeoVim",
