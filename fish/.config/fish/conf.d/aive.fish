@@ -28,6 +28,9 @@ function aive
     set args $argv[2..-1]
 
     aivebuild $pkg
+    if test $status -ne 0
+        return $status
+    end
     if test $pkg = "graphql"
         return
     end
@@ -48,6 +51,12 @@ function aivebuild
     set args $argv[2..-1]
 
     make build pkg=$pkg $args
+    set build_status $status
+    # test result and exit on failure
+    if test $build_status -ne 0
+        notify-send "AIVE Build Failed" "Package: $pkg"
+    end
+    return $build_status
 end
 
 function aiverun
