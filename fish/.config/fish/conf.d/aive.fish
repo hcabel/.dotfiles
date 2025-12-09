@@ -114,6 +114,15 @@ function aivepipeline
     end
 end
 
+function naive
+    cd ~/aive/;
+    nvim .;
+end
+function nstack
+    cd ~/stack/;
+    nvim .;
+end
+
 function kubediff
     cd ~/stack/;
     if test (count $argv) -gt 0
