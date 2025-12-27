@@ -1,0 +1,30 @@
+# Better stow, will rename existing folders to .bak instead of merging them
+#!/bin/bash
+
+DOTFILES_DIR="$HOME/.dotfiles"
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <package-name>"
+    exit 1
+fi
+
+PACKAGE_NAME="$1"
+PACKAGE_DIR="$DOTFILES_DIR/$PACKAGE_NAME"
+PKG_DESTINATION="$HOME/.config/$PACKAGE_NAME"
+
+# Check if the package directory exists
+if [ ! -d "$PACKAGE_DIR" ]; then
+    echo "Error: Package '$PACKAGE_NAME' does not exist in $DOTFILES_DIR."
+    exit 1
+fi
+
+# If package is already exist and isn't a symlink, rename it to .bak
+if [ -d "$PKG_DESTINATION" ] && [ ! -L "$PKG_DESTINATION" ]; then
+    echo "Renaming existing directory '$PKG_DESTINATION' to '${PKG_DESTINATION}.bak'..."
+    mv "$PKG_DESTINATION" "${PKG_DESTINATION}.bak"
+fi
+
+# Stow the package
+echo "Stowing package '$PACKAGE_NAME'..."
+stow -d "$DOTFILES_DIR" -t "$HOME" "$PACKAGE_NAME"
+
