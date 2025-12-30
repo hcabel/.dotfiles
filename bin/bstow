@@ -8,12 +8,16 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-PACKAGE_NAME="$1"
-PACKAGE_DIR="$DOTFILES_DIR/$PACKAGE_NAME"
+DISTRO="$1"
+DISTRO_DIR="$DOTFILES_DIR/$DISTRO"
+
+PACKAGE_NAME="$2"
+PACKAGE_DIR="$DOTFILES_DIR/$DISTRO/$PACKAGE_NAME"
 PKG_DESTINATION="$HOME/.config/$PACKAGE_NAME"
 
-# Check if the package directory exists
+# Check if the package directory exist
 if [ ! -d "$PACKAGE_DIR" ]; then
+   echo "$PACKAGE_DIR" "$DISTRO_DIR"
     echo "Error: Package '$PACKAGE_NAME' does not exist in $DOTFILES_DIR."
     exit 1
 fi
@@ -26,5 +30,5 @@ fi
 
 # Stow the package
 echo "Stowing package '$PACKAGE_NAME'..."
-stow -d "$DOTFILES_DIR" -t "$HOME" "$PACKAGE_NAME"
+stow -d "$DISTRO_DIR" -t "$HOME" "$PACKAGE_NAME"
 

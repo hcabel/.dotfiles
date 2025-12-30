@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Update package database and upgrade all packages
+sudo pacman -Syu --noconfirm
+if [ $? -ne 0 ]; then
+    echo "Failed to update and upgrade packages."
+    exit 1
+fi
+
+# Install required packages
+packages=(
+    jq        # Json parser
+    stow      # Needed for config linking
+    zoxide    # better cd command
+    eza       # modern ls replacement
+    lazygit   # git overpowered TUI
+    nvim      # Code editor
+    waybar,   # status bar
+)
+for package in "${packages[@]}"; do
+    sudo pacman -S --noconfirm "$package"
+    if [ $? -ne 0 ]; then
+        echo "Failed to install $package."
+        exit 1
+    fi
+done

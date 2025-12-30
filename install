@@ -1,13 +1,44 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
-pushd $DOTFILES
-for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
-do
-    echo "stow $folder"
-    stow -D $folder
-    stow $folder
+# No arg print usage
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <distro>"
+fi
+
+echo "!! We expect all packages are already installed !!"
+
+# Lowercase the distro name
+DISTRO=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+# Make sure disto is supported by checking against folder in current directory
+if [ ! -d "$DISTRO" ]; then
+    echo "Error: Unsupported distro '$DISTRO'. Supported distros are:"
+    ls -d */ | sed 's#/##'
+    exit 1
+fi
+
+better_stow() {
+    STOW_EXEC="$(pwd)/bin/bstow"
+    $STOW_EXEC $1 $2
+}
+
+echo ">> Installing dotfiles for: $DISTRO <<"
+
+# Keep track of all the stowed packages
+STOWED_PACKAGES=()
+for package_dir in "$DISTRO"/*/; do
+    package=$(basename "$package_dir")
+    echo "-> Stowing package: $package"
+    better_stow $DISTRO $package
+    STOWED_PACKAGES+=("$package")
 done
-popd
 
-./stow
-popd
+# Stow base packages unless we already did
+for base_package_dir in "base"/*/; do
+    base_package=$(basename "$base_package_dir")
+    if [[ " ${STOWED_PACKAGES[@]} " =~ " ${base_package} " ]]; then
+        echo "-> Skipping base package (already stowed): $base_package"
+    else
+        echo "-> Stowing base package: $base_package"
+        better_stow base $base_package
+    fi
+done

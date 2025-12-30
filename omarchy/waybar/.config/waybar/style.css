@@ -1,0 +1,142 @@
+@import "../omarchy/current/theme/waybar.css";
+
+* {
+    background-color: unset;
+    color: @foreground;
+
+    font-family: CaskaydiaMono Nerd Font;
+    font-size: 15px;
+}
+
+.modules-left,
+.modules-right,
+.modules-center {
+    margin-top: 10px;
+}
+
+.modules-left {
+    margin-left: 8px;
+}
+
+.modules-right {
+    margin-right: 8px;
+}
+
+#tray,
+#cpu,
+#battery,
+#network,
+#bluetooth,
+#pulseaudio,
+#custom-omarchy,
+#workspaces,
+#window,
+#clock {
+    margin: 0px 2px;
+    padding: 3px 15px;
+    border-radius: 5px;
+
+    min-width: 12px;
+    background-color: alpha(@background, .6);
+}
+
+#custom-update {
+    padding: 3px 5px;
+}
+
+#tray:hover,
+#cpu:hover,
+#battery:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#custom-omarchy:hover,
+#workspaces:hover,
+#window:hover,
+#clock:hover,
+#custom-screenrecording-indicator:hover,
+#custom-update:hover {
+    transition: all .3s ease;
+    color: #7aa2f7;
+}
+
+#custom-expand-icon {
+    margin-right: 7px;
+}
+
+tooltip {
+    background-color: @background;
+    padding: 2px;
+}
+
+#custom-update {
+    font-size: 10px;
+}
+
+#clock {
+    margin-left: 8.75px;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+#custom-screenrecording-indicator {
+    padding: 0px 5px;
+    min-width: 12px;
+    font-size: 10px;
+}
+
+#custom-screenrecording-indicator.active {
+    color: #a55555;
+}
+
+/* ****** WORKSPACES ****** */
+
+#workspaces * {
+    color: #bb9af7;
+    font-size: 17px;
+}
+
+#workspaces button {
+    all: initial;
+    padding: 0 6px;
+    margin: 0 1.5px;
+    min-width: 9px;
+}
+
+#workspaces button.empty {
+    opacity: 0.25;
+}
+
+#workspaces button.active {
+    /* FIXME [hcabel 2025-09-27]: Not working :/ */
+    color: #f7768e;
+}
+
+/* ****** BATTERY ****** */
+
+#battery.warning {
+    color: #ff9e64;
+}
+
+#battery.critical {
+    color: #f7768e;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        opacity: 0.25;
+    }
+}
+
+/* Need to be last */
+#battery.charging {
+    animation-name: unset;
+    color: #9ece6a;
+}
