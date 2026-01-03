@@ -1,4 +1,3 @@
-# Better stow, will rename existing folders to .bak instead of merging them
 #!/bin/bash
 
 DOTFILES_DIR="$HOME/.dotfiles"
@@ -29,6 +28,5 @@ if [ -d "$PKG_DESTINATION" ] && [ ! -L "$PKG_DESTINATION" ]; then
 fi
 
 # Stow the package
-echo "Stowing package '$PACKAGE_NAME'..."
 stow -d "$DISTRO_DIR" -t "$HOME" "$PACKAGE_NAME"
 

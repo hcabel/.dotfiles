@@ -17,8 +17,7 @@ if [ ! -d "$DISTRO" ]; then
 fi
 
 better_stow() {
-    STOW_EXEC="$(pwd)/bin/bstow"
-    $STOW_EXEC $1 $2
+    $(pwd)/bin/bstow $1 $2
 }
 
 echo ">> Installing dotfiles for: $DISTRO <<"
