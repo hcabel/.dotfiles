@@ -5,7 +5,24 @@ if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <distro>"
 fi
 
-echo "!! We expect all packages are already installed !!"
+# Package installation (unless --no-install is given)
+if [ "$2" == "--no-install" ]; then
+    echo ">> Skipping package installation as per --no-install flag <<"
+else
+    # Detect package manager
+    pacman --version &> /dev/null
+    if [ $? -eq 0 ]; then
+        echo ">> Detected pacman package manager. Installing required packages..."
+        ./bin/pacman_install
+        if [ $? -ne 0 ]; then
+            echo "Package installation failed. Exiting."
+            exit 1
+        fi
+    else
+        echo "Error: Unsupported package manager."
+        exit 1;
+    fi
+fi
 
 # Lowercase the distro name
 DISTRO=$(echo "$1" | tr '[:upper:]' '[:lower:]')
@@ -35,7 +52,7 @@ done
 for base_package_dir in "base"/*/; do
     base_package=$(basename "$base_package_dir")
     if [[ " ${STOWED_PACKAGES[@]} " =~ " ${base_package} " ]]; then
-        echo "-> Skipping base package (already stowed): $base_package"
+        echo "-> Stowing base package: $base_package (skipped, already stowed)"
     else
         echo "-> Stowing base package: $base_package"
         better_stow base $base_package
