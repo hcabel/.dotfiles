@@ -62,3 +62,13 @@ for base_package_dir in "base"/*/; do
         better_stow base $base_package
     fi
 done
+
+# Make fish default shell
+chsh -s $(which fish)
+
+echo "___________________________________________________"
+echo ">> Some changes require a reboot to take effect. <<"
+echo "---------------------------------------------------"
+
+# TODO [hcabel 2026-01-04]: Install zen default extensions
+# TODO [hcabel 2026-01-04]: Install SSH and GPG keys from secure storage

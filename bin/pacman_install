@@ -51,11 +51,3 @@ for package in "${packages[@]}"; do
         fi
     fi
 done
-
-# Make fish default shell
-chsh -s $(which fish)
-
-echo "___________________________________________________"
-echo ">> Some changes require a reboot to take effect. <<"
-echo "---------------------------------------------------"
-
