@@ -39,22 +39,26 @@ better_stow() {
 
 echo ">> Installing dotfiles for: $DISTRO <<"
 
+echo ">> STOW distro override  <<"
+
 # Keep track of all the stowed packages
 STOWED_PACKAGES=()
 for package_dir in "$DISTRO"/*/; do
     package=$(basename "$package_dir")
-    echo "-> Stowing package: $package"
+    echo "\t + $package"
     better_stow $DISTRO $package
     STOWED_PACKAGES+=("$package")
 done
+
+echo ">> STOW base <<"
 
 # Stow base packages unless we already did
 for base_package_dir in "base"/*/; do
     base_package=$(basename "$base_package_dir")
     if [[ " ${STOWED_PACKAGES[@]} " =~ " ${base_package} " ]]; then
-        echo "-> Stowing base package: $base_package (skipped, already stowed)"
+    	echo "\t   $package"
     else
-        echo "-> Stowing base package: $base_package"
+    	echo "\t + $package"
         better_stow base $base_package
     fi
 done

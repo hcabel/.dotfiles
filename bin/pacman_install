@@ -9,7 +9,7 @@ fi
 
 # Install required packages
 packages=(
-    yay,            # AUR helper (must be installed before other AUR packages)
+    yay             # AUR helper (must be installed before other AUR packages)
     jq              # Json parser
     stow            # Needed for config linking
     zoxide          # better cd command
@@ -19,28 +19,26 @@ packages=(
     waybar          # status bar
     zen-browser-bin # Browser
     discord
-    alacrity        # terminal emulator
+    alacritty        # terminal emulator
     hyprlock        # screen locker
     hyprsunset      # automatic brightness and color temperature adjustment
     hypridle        # automatic screen locking on idle
 
     # Dev tools
     nvim            # Code editor
-    rustup
     rust-analyzer   # Rust language server
     lua-language-server
     gopls
     typescript-language-server
     ccls
-    clangd
     tree-sitter-cli  # for nvim treesitter
 )
 
 # TODO [hcabel 2026-01-03]: Make fish default shell
 
 for package in "${packages[@]}"; do
-    # Deternine if it's in official repos or AUR
-    sudo pacman -Q "$package" &> /dev/null
+    echo ">> Installing: \"$package\" <<"
+    sudo pacman -Ss "$package" &> /dev/null
     if [ $? -eq 1 ]; then
         yay -S --noconfirm "$package"
         if [ $? -ne 0 ]; then
