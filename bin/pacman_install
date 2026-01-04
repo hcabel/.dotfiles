@@ -26,6 +26,7 @@ packages=(
 
     # Dev tools
     nvim            # Code editor
+    rustup
     rust-analyzer   # Rust language server
     lua-language-server
     gopls
