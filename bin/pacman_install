@@ -34,8 +34,6 @@ packages=(
     tree-sitter-cli  # for nvim treesitter
 )
 
-# TODO [hcabel 2026-01-03]: Make fish default shell
-
 for package in "${packages[@]}"; do
     echo ">> Installing: \"$package\" <<"
     sudo pacman -Ss "$package" &> /dev/null
@@ -53,3 +51,11 @@ for package in "${packages[@]}"; do
         fi
     fi
 done
+
+# Make fish default shell
+chsh -s $(which fish)
+
+echo "___________________________________________________"
+echo ">> Some changes require a reboot to take effect. <<"
+echo "---------------------------------------------------"
+
