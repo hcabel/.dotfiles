@@ -14,8 +14,8 @@ packages=(
     stow            # Needed for config linking
     zoxide          # better cd command
     eza             # modern ls replacement
+    fish            # Shell
     lazygit         # git overpowered TUI
-    nvim            # Code editor
     waybar          # status bar
     zen-browser-bin # Browser
     discord
@@ -23,6 +23,16 @@ packages=(
     hyprlock        # screen locker
     hyprsunset      # automatic brightness and color temperature adjustment
     hypridle        # automatic screen locking on idle
+
+    # Dev tools
+    nvim            # Code editor
+    rust-analyzer   # Rust language server
+    lua-language-server
+    gopls
+    typescript-language-server
+    ccls
+    clangd
+    tree-sitter-cli  # for nvim treesitter
 )
 
 # TODO [hcabel 2026-01-03]: Make fish default shell
