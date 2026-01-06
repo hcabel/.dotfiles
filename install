@@ -10,10 +10,19 @@ if [ "$2" == "--no-install" ]; then
     echo ">> Skipping package installation as per --no-install flag <<"
 else
     # Detect package manager
-    pacman --version &> /dev/null
+    pacman --version &> /dev/null # Pacman
     if [ $? -eq 0 ]; then
         echo ">> Detected pacman package manager. Installing required packages..."
         ./bin/pacman_install
+        if [ $? -ne 0 ]; then
+            echo "Package installation failed. Exiting."
+            exit 1
+        fi
+    fi
+    dnf --version &> /dev/null # DNF
+    if [ $? -eq 0 ]; then
+        echo ">> Detected dnf package manager. Installing required packages..."
+        ./bin/dnf_install
         if [ $? -ne 0 ]; then
             echo "Package installation failed. Exiting."
             exit 1
@@ -45,7 +54,7 @@ echo ">> STOW distro override  <<"
 STOWED_PACKAGES=()
 for package_dir in "$DISTRO"/*/; do
     package=$(basename "$package_dir")
-    echo "\t + $package"
+    echo "  + $package"
     better_stow $DISTRO $package
     STOWED_PACKAGES+=("$package")
 done
@@ -56,9 +65,9 @@ echo ">> STOW base <<"
 for base_package_dir in "base"/*/; do
     base_package=$(basename "$base_package_dir")
     if [[ " ${STOWED_PACKAGES[@]} " =~ " ${base_package} " ]]; then
-    	echo "\t   $package"
+    	echo "    $base_package (skipped, already stowed)"
     else
-    	echo "\t + $package"
+    	echo "  + $base_package"
         better_stow base $base_package
     fi
 done
