@@ -71,6 +71,10 @@ function aiverun
 
     if test $pkg = "platform-app"
         make serve pkg=platform-app $args
+    else if test $pkg = "backoffice-app"
+        make serve pkg=backoffice-app $args
+    else if string match -q "analyser-*" $pkg # if start with "analyser-", omit env sourcing
+        bin/$pkg $args
     else
         source bin/$pkg.env; and bin/$pkg $args
     end
