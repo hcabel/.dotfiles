@@ -73,6 +73,7 @@ for base_package_dir in "base"/*/; do
 done
 
 # Make fish default shell
+# TODO [hcabel 2026-01-06]: skip if Fish already default shell detection
 chsh -s $(which fish)
 
 echo "___________________________________________________"
