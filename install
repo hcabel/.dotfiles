@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # No arg print usage
-if [ "$#" -ne 1 ]; then
+if [ "$#" -lt 1 ]; then
     echo "Usage: $0 <distro>"
 fi
 
@@ -33,44 +33,48 @@ else
     fi
 fi
 
-# Lowercase the distro name
-DISTRO=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-# Make sure disto is supported by checking against folder in current directory
-if [ ! -d "$DISTRO" ]; then
-    echo "Error: Unsupported distro '$DISTRO'. Supported distros are:"
-    ls -d */ | sed 's#/##'
-    exit 1
-fi
-
-better_stow() {
-    $(pwd)/bin/bstow $1 $2
-}
-
-echo ">> Installing dotfiles for: $DISTRO <<"
-
-echo ">> STOW distro override  <<"
-
-# Keep track of all the stowed packages
-STOWED_PACKAGES=()
-for package_dir in "$DISTRO"/*/; do
-    package=$(basename "$package_dir")
-    echo "  + $package"
-    better_stow $DISTRO $package
-    STOWED_PACKAGES+=("$package")
-done
-
-echo ">> STOW base <<"
-
-# Stow base packages unless we already did
-for base_package_dir in "base"/*/; do
-    base_package=$(basename "$base_package_dir")
-    if [[ " ${STOWED_PACKAGES[@]} " =~ " ${base_package} " ]]; then
-    	echo "    $base_package (skipped, already stowed)"
-    else
-    	echo "  + $base_package"
-        better_stow base $base_package
+if [ "$2" == "--no-stow" || "$2" == "--no-link" ]; then
+    echo ">> Skipping dotfiles stowing as per --no-stow/--no-link flag <<"
+else
+    # Lowercase the distro name
+    DISTRO=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    # Make sure disto is supported by checking against folder in current directory
+    if [ ! -d "$DISTRO" ]; then
+        echo "Error: Unsupported distro '$DISTRO'. Supported distros are:"
+        ls -d */ | sed 's#/##'
+        exit 1
     fi
-done
+
+    better_stow() {
+        $(pwd)/bin/bstow $1 $2
+    }
+
+    echo ">> Installing dotfiles for: $DISTRO <<"
+
+    echo ">> STOW distro override  <<"
+
+    # Keep track of all the stowed packages
+    STOWED_PACKAGES=()
+    for package_dir in "$DISTRO"/*/; do
+        package=$(basename "$package_dir")
+        echo "  + $package"
+        better_stow $DISTRO $package
+        STOWED_PACKAGES+=("$package")
+    done
+
+    echo ">> STOW base <<"
+
+    # Stow base packages unless we already did
+    for base_package_dir in "base"/*/; do
+        base_package=$(basename "$base_package_dir")
+        if [[ " ${STOWED_PACKAGES[@]} " =~ " ${base_package} " ]]; then
+            echo "    $base_package (skipped, already stowed)"
+        else
+            echo "  + $base_package"
+            better_stow base $base_package
+        fi
+    done
+fi
 
 # Make fish default shell
 # TODO [hcabel 2026-01-06]: skip if Fish already default shell detection
