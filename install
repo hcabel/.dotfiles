@@ -33,7 +33,7 @@ else
     fi
 fi
 
-if [ "$2" == "--no-stow" || "$2" == "--no-link" ]; then
+if [ "$2" == "--no-stow" ] || [ "$2" == "--no-link" ]; then
     echo ">> Skipping dotfiles stowing as per --no-stow/--no-link flag <<"
 else
     # Lowercase the distro name
@@ -77,8 +77,10 @@ else
 fi
 
 # Make fish default shell
-# TODO [hcabel 2026-01-06]: skip if Fish already default shell detection
-chsh -s $(which fish)
+if [ "$SHELL" != "$(which fish)" ]; then
+    echo ">> Changing default shell to Fish <<"
+    chsh -s $(which fish)
+fi
 
 echo "___________________________________________________"
 echo ">> Some changes require a reboot to take effect. <<"
