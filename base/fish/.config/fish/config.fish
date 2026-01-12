@@ -157,3 +157,7 @@ end
 function bdiff
     git diff --no-index -- $argv[1] $argv[2] | diff-so-fancy
 end
+
+# add value to env
+set -gx PATH $HOME/.cargo/bin $PATH
+
