@@ -9,45 +9,64 @@ fi
 
 # Install required packages
 packages=(
-    jq                  # Json parser
-    stow                # Needed for config linking
-    zoxide              # better cd command
-    eza                 # modern ls replacement
-    fish                # Shell
-    lazygit             # git overpowered TUI
-    waybar              # status bar
-    app.zen_browser.zen # Browser
-    discord
-    alacritty           # terminal emulator
-    hyprlock            # screen locker
-    hyprsunset          # automatic brightness and color temperature adjustment
-    hypridle            # automatic screen locking on idle
+    "dnf:jq"                    # Json parser
+    "dnf:stow"                  # Needed for config linking
+    "dnf:zoxide"                # better cd command
+    "dnf:eza"                   # modern ls replacement
+    "dnf:fish"                  # Shell
+    "dnf:lazygit"               # git overpowered TUI
+    "dnf:waybar"                # status bar
+    "flatpak:app.zen_browser.zen" # Browser
+    "dnf:discord"
+    "dnf:alacritty"             # terminal emulator
+    "dnf:hyprlock"              # screen locker
+    "dnf:hyprsunset"            # automatic brightness and color temperature adjustment
+    "dnf:hypridle"              # automatic screen locking on idle
+    "dnf:rust"                  # Rust programming language
+    "dnf:cargo"                 # Rust package manager
+    "dnf:pkgconf-pkg-config"
+    "dnf:dbus-devel"
+    "cargo:bluetui"             # Bluetooth TUI client
 
     # Dev tools
-    nvim            # Code editor
-    rust-analyzer   # Rust language server
+    "dnf:nvim"                  # Code editor
+    "dnf:rust-analyzer"         # Rust language server
     # TODO [hcabel 2026-01-06]: lua-language-server
-    gopls
+    "dnf:gopls"
     # TODO [hcabel 2026-01-06]: typescript-language-server
     # TODO [hcabel 2026-01-06]: ccls
-    tree-sitter-cli  # for nvim treesitter
+    "dnf:tree-sitter-cli"       # for nvim treesitter
 )
 
 for package in "${packages[@]}"; do
     echo ""
     echo ">> Installing: \"$package\" <<"
-    sudo dnf info "$package" &> /dev/null
-    if [ $? -eq 1 ]; then
-        flatpak install -y "$package"
-        if [ $? -ne 0 ]; then
-            echo "Installation failed ($package)."
+    IFS=":" read -r manager pkg_name <<< "$package"
+    case $manager in
+        "dnf")
+            sudo dnf install -y "$pkg_name"
+            if [ $? -ne 0 ]; then
+                echo "DNF installation failed ($pkg_name)."
+                exit 1
+            fi
+            ;;
+        "flatpak")
+            flatpak install -y "$pkg_name"
+            if [ $? -ne 0 ]; then
+                echo "Flatpak installation failed ($pkg_name)."
+                exit 1
+            fi
+            ;;
+        "cargo")
+            cargo install "$pkg_name"
+            if [ $? -ne 0 ]; then
+                echo "Cargo installation failed ($pkg_name)."
+                exit 1
+            fi
+            ;;
+        *)
+            echo "Unknown package manager: $manager"
             exit 1
-        fi
-    else
-        sudo dnf install -y "$package"
-        if [ $? -ne 0 ]; then
-            echo "Pacman installation failed ($package)."
-            exit 1
-        fi
-    fi
+            ;;
+    esac
 done
