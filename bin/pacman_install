@@ -1,53 +1,68 @@
 #!/bin/bash
 
 # Update package database and upgrade all packages
-sudo pacman -Syu --noconfirm
-if [ $? -ne 0 ]; then
-    echo "Failed to update and upgrade packages."
-    exit 1
-fi
+# sudo pacman -Syu --noconfirm
+# if [ $? -ne 0 ]; then
+#     echo "Failed to update and upgrade packages."
+#     exit 1
+# fi
 
 # Install required packages
 packages=(
-    yay             # AUR helper (must be installed before other AUR packages)
-    jq              # Json parser
-    stow            # Needed for config linking
-    zoxide          # better cd command
-    eza             # modern ls replacement
-    fish            # Shell
-    lazygit         # git overpowered TUI
-    waybar          # status bar
-    zen-browser-bin # Browser
-    discord
-    alacritty        # terminal emulator
-    hyprlock        # screen locker
-    hyprsunset      # automatic brightness and color temperature adjustment
-    hypridle        # automatic screen locking on idle
+    "pacman:yay"             # AUR helper (must be installed before other AUR packages)
+    "pacman:jq"              # Json parser
+    "pacman:stow"            # Needed for config linking
+    "pacman:zoxide"          # better cd command
+    "pacman:eza"             # modern ls replacement
+    "pacman:fish"            # Shell
+    "pacman:lazygit"         # git overpowered TUI
+    "pacman:waybar"          # status bar
+    # "yay:zen-browser-bin"    # Browser
+    "pacman:discord"
+    "pacman:alacritty"       # terminal emulator
+    "pacman:hyprlock"        # screen locker
+    "pacman:hyprsunset"      # automatic brightness and color temperature adjustment
+    "pacman:hypridle"        # automatic screen locking on idle
+    "pacman:rust"            # Rust programming language
+    "pacman:cargo"           # Rust package manager
+    "cargo:bluetui"          # Bluetooth TUI client
+    "cargo:yazi-build"       # Yazi bluetooth TUI client dependency
 
     # Dev tools
-    nvim            # Code editor
-    rust-analyzer   # Rust language server
-    lua-language-server
-    gopls
-    typescript-language-server
-    ccls
-    tree-sitter-cli  # for nvim treesitter
+    "pacman:nvim"            # Code editor
+    "pacman:rust-analyzer"
+    "pacman:lua-language-server"
+    "pacman:gopls"
+    "pacman:typescript-language-server"
+    "pacman:ccls"
+    "pacman:tree-sitter-cli"  # for nvim treesitter
 )
 
 for package in "${packages[@]}"; do
     echo ">> Installing: \"$package\" <<"
-    sudo pacman -Ss "$package" &> /dev/null
-    if [ $? -eq 1 ]; then
-        yay -S --noconfirm "$package"
-        if [ $? -ne 0 ]; then
-            echo "Installation failed ($package)."
-            exit 1
-        fi
-    else
-        sudo pacman -S --noconfirm "$package"
-        if [ $? -ne 0 ]; then
-            echo "Pacman installation failed ($package)."
-            exit 1
-        fi
-    fi
+    IFS=":" read -r manager pkg_name <<< "$package"
+    case $manager in
+        "pacman")
+            sudo pacman -S --noconfirm "$pkg_name"
+            if [ $? -ne 0 ]; then
+                echo "Pacman installation failed ($pkg_name)."
+                exit 1
+            fi
+            ;;
+        "yay")
+            yay -S --noconfirm "$pkg_name"
+            if [ $? -ne 0 ]; then
+                echo "Yay installation failed ($pkg_name)."
+                exit 1
+            fi
+            ;;
+        "cargo")
+            cargo install "$pkg_name"
+            if [ $? -ne 0 ]; then
+                echo "Cargo installation failed ($pkg_name)."
+                exit 1
+            fi
+            ;;
+        *)
+    esac
 done
