@@ -23,7 +23,6 @@ packages=(
     "pacman:hyprlock"        # screen locker
     "pacman:hyprsunset"      # automatic brightness and color temperature adjustment
     "pacman:hypridle"        # automatic screen locking on idle
-    "pacman:rust"            # Rust programming language
     "pacman:cargo"           # Rust package manager
     "cargo:bluetui"          # Bluetooth TUI client
     "cargo:yazi-build"       # Yazi bluetooth TUI client dependency
