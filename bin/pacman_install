@@ -19,7 +19,7 @@ packages=(
     "pacman:waybar"          # status bar
     # "yay:zen-browser-bin"    # Browser
     "pacman:discord"
-    "pacman:alacritty"       # terminal emulator
+    "pacman:kitty"           # terminal emulator
     "pacman:hyprlock"        # screen locker
     "pacman:hyprsunset"      # automatic brightness and color temperature adjustment
     "pacman:hypridle"        # automatic screen locking on idle

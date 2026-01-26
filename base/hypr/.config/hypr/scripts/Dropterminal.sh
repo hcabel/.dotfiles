@@ -7,7 +7,7 @@
 # Usage: ./Dropdown.sh [-d] <terminal_command>
 # Example: ./Dropdown.sh foot
 #          ./Dropdown.sh -d foot (with debug output)
-#          ./Dropdown.sh "kitty -e zsh"
+#          ./Dropdown.sh "kitty zsh"
 #          ./Dropdown.sh "alacritty --working-directory /home/user"
 
 DEBUG=false
@@ -45,8 +45,8 @@ if [ -z "$TERMINAL_CMD" ]; then
   echo "Examples:"
   echo "  $0 foot"
   echo "  $0 -d foot (with debug output)"
-  echo "  $0 'kitty -e zsh'"
-  echo "  $0 'alacritty --working-directory /home/user'"
+  echo "  $0 'kitty zsh'"
+  echo "  $0 'kitty --working-directory /home/user'"
   echo ""
   echo "Edit the script to modify size and position:"
   echo "  WIDTH_PERCENT  - Width as percentage of screen (default: 50)"

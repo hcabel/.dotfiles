@@ -18,7 +18,7 @@ packages=(
     "dnf:waybar"                # status bar
     "flatpak:app.zen_browser.zen" # Browser
     "dnf:discord"
-    "dnf:alacritty"             # terminal emulator
+    "dnf:kitty"                 # terminal emulator
     "dnf:hyprlock"              # screen locker
     "dnf:hyprsunset"            # automatic brightness and color temperature adjustment
     "dnf:hypridle"              # automatic screen locking on idle
