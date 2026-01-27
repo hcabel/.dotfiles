@@ -26,7 +26,11 @@ packages=(
     "dnf:cargo"                 # Rust package manager
     "dnf:pkgconf-pkg-config"
     "dnf:dbus-devel"
-    "cargo:bluetui"             # Bluetooth TUI client
+    "cargo:bluetui"             # Bluetooth tui client
+    "cargo:impala"              # WIFI TUI client
+    "cargo:yazi-build"
+    "cargo:yazi-cli"             # Bluetooth TUI client
+    "cargo:yazi-fm"             # File manager
 
     # Dev tools
     "dnf:nvim"                  # Code editor
