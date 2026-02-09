@@ -1,0 +1,5 @@
+[[mgr.prepend_keymap]]
+on = ["T"]
+run = 'shell --confirm "kitty --directory \"$PWD\""'
+desc = "Open new Kitty terminal here"
+
