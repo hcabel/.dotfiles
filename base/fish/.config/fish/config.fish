@@ -49,7 +49,7 @@ function colast
 end
 
 function bdiff
-    git diff --no-index -- $argv[1] $argv[2] | diff-so-fancy
+    git diff --no-index -- $argv[1] $argv[2]
 end
 
 # add value to env
