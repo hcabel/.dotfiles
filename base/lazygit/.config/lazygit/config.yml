@@ -1,0 +1,7 @@
+git:
+  pagers:
+    - pager: delta --paging=never --dark --diff-so-fancy
+      colorArg: never
+    - pager: ydiff -p cat -u --wrap --width={{columnWidth}}
+      colorArg: never
+    - externalDiffCommand: difft --color=always --display inline
