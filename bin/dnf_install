@@ -27,6 +27,7 @@ packages=(
     "dnf:pkgconf-pkg-config"
     "dnf:dbus-devel"
     "cargo:bluetui"             # Bluetooth tui client
+    "dnf:iwd"
     "cargo:impala"              # WIFI TUI client
     "cargo:yazi-build"
     "cargo:yazi-cli"             # Bluetooth TUI client
