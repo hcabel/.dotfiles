@@ -119,7 +119,7 @@
     },
     "pulseaudio": {
         "format": "{icon}",
-        "on-click": "$TERMINAL --class=Wiremix -e wiremix",
+        "on-click": "~/.config/scripts/launch-tui.sh wiremix",
         "on-click-right": "pamixer -t",
         "tooltip-format": "Playing at {volume}%",
         "scroll-step": 5,

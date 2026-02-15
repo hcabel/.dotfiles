@@ -30,8 +30,9 @@ packages=(
     "dnf:iwd"
     "cargo:impala"              # WIFI TUI client
     "cargo:yazi-build"
-    "cargo:yazi-cli"             # Bluetooth TUI client
+    "cargo:yazi-cli"            # Bluetooth TUI client
     "cargo:yazi-fm"             # File manager
+    "dnw:wiremix"               # Audio mixer for PipeWire
 
     # Dev tools
     "dnf:nvim"                  # Code editor
