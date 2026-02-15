@@ -12,6 +12,7 @@
   ],
   "modules-center": [
     "hyprland/workspaces",
+    "custom/notification",
   ],
   "modules-right": [
     "group/tray-expander",
