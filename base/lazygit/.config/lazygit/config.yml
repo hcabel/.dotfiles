@@ -1,3 +1,5 @@
+os:
+  edit: 'nvim {{filename}}'
 git:
   pagers:
     - pager: delta --paging=never --dark --diff-so-fancy
