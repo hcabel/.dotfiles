@@ -1,4 +1,6 @@
 
+@import "./wallust/colors-waybar.css";
+
 * {
     background-color: unset;
     color: @foreground;
@@ -36,7 +38,7 @@
     border-radius: 5px;
 
     min-width: 12px;
-    background-color: alpha(@background, .6);
+    background-color: alpha(@background, 0.25);
 }
 
 #custom-update {
