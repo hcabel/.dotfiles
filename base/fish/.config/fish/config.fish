@@ -55,3 +55,10 @@ end
 # add value to env
 set -gx PATH $HOME/.cargo/bin $PATH
 
+function clear
+    command clear
+    fastfetch
+    commandline -f repaint
+end
+
+bind \cl clear
