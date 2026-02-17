@@ -32,7 +32,8 @@ packages=(
     "cargo:yazi-build"
     "cargo:yazi-cli"            # Bluetooth TUI client
     "cargo:yazi-fm"             # File manager
-    "dnw:wiremix"               # Audio mixer for PipeWire
+    "dnf:wiremix"               # Audio mixer for PipeWire
+    "dnf:socat"                 # Monitor switch listener
 
     # Dev tools
     "dnf:nvim"                  # Code editor
