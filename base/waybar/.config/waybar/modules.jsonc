@@ -62,12 +62,9 @@
       "Kitty": " Kitty",
       "hcabel@omarchy:(.*)": " $1",
       "nvim.*": " NeoVim",
-      ".* — Mozilla Firefox": " Mozilla Firefox",
+      "(.*) — Mozilla Firefox": " $1",
       ".*Discord": " Discord",
       "(.*) - .* - Obsidian.*": "󱩼 Obsidian - $1",
-      ".* YouTube — Zen Browser": " Youtube - Zen Browser",
-      ".* Gmail — Zen Browser": "󰊫 Gmail - Zen Browser",
-      ".* — Zen Browser": " Zen Browser"
     }
   },
   "cpu": {
