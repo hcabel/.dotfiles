@@ -20,10 +20,16 @@ alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 function cd
     if test (count $argv) -eq 0
         builtin cd ~
-    else if test (count $argv) -eq 1 -a -d $argv[1]
-        builtin cd $argv[1]
+    else if test (count $argv) -eq 1
+        if test -d $argv[1]
+            builtin cd $argv[1]
+        else if test -d ~/.config/$argv[1]
+            builtin cd ~/.config/$argv[1]
+        else
+            z $argv[1] && printf "\U00F17A9" && pwd || echo "Error: Directory not found"
+        end
     else
-        z $argv[1] && printf "\U00F17A9" && pwd || echo "Error: Directory not found"
+        echo "Usage: cd [directory]"
     end
 end
 
