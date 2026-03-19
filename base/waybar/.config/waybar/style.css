@@ -106,8 +106,15 @@ tooltip {
     min-width: 9px;
 }
 
-#workspaces button.empty {
+#workspaces button.empty label {
     opacity: 0.25;
+}
+
+#workspaces button:nth-child(3),
+#workspaces button:nth-child(6) {
+    padding: 0 12px;
+    border-right: 2px solid #7aa2f7;
+    border-radius: 1px;
 }
 
 #workspaces button.active {
