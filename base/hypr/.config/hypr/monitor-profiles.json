@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "AU Optronics 0xD0A2": {
+      "scale": 1.2,
+      "position": "0x0",
+      "mode": "preferred"
+    }
+  },
+  "default": {
+    "scale": 1.0,
+    "position": "auto",
+    "mode": "preferred"
+  }
+}
