@@ -4,6 +4,11 @@
       "scale": 1.2,
       "position": "0x0",
       "mode": "preferred"
+    },
+    "Sharp Corporation 0x1548": {
+      "scale": 1.2,
+      "position": "0x0",
+      "mode": "preferred"
     }
   },
   "default": {
