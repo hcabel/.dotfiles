@@ -3,17 +3,26 @@
     "AU Optronics 0xD0A2": {
       "scale": 1.2,
       "position": "0x0",
-      "mode": "preferred"
+      "mode": "preferred",
+      "priority": 0
     },
     "Sharp Corporation 0x1548": {
       "scale": 1.2,
       "position": "0x0",
-      "mode": "preferred"
+      "mode": "preferred",
+      "priority": 0
+    },
+    "Iiyama North America PL2730Q 1219930721731": {
+      "scale": 1.0,
+      "position": "0x0",
+      "mode": "2560x1440@59.95Hz",
+      "priority": 1
     }
   },
   "default": {
     "scale": 1.0,
     "position": "auto",
-    "mode": "preferred"
+    "mode": "preferred",
+    "priority": 0
   }
 }
