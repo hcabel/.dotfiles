@@ -7,3 +7,12 @@ git:
     - pager: ydiff -p cat -u --wrap --width={{columnWidth}}
       colorArg: never
     - externalDiffCommand: difft --color=always --display inline
+customCommands:
+  - key: 'X'
+    context: 'files'
+    command: "git rm '{{.SelectedFile.Name}}'"
+    description: "Resolve UD conflict: Keep deletion (git rm)"
+    prompts:
+      - type: 'confirm'
+        title: "Keep Deletion?"
+        body: "Are you sure you want to git rm {{.SelectedFile.Name}} and keep the deletion?"
