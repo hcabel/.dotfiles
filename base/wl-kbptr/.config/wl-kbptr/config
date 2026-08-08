@@ -1,0 +1,56 @@
+[general]
+home_row_keys=
+modes=tile,bisect
+cancellation_status_code=0
+
+[mode_tile]
+# bright yellow label, easy to read
+label_color=#ffe600ff
+# already-typed part in orange so you can see your progress
+label_select_color=#ff7a00ff
+# darken the rest of the screen strongly
+unselectable_bg_color=#000000aa
+# solid dark tile so text pops
+selectable_bg_color=#0a1830e0
+# bright cyan border
+selectable_border_color=#00e5ffff
+label_font_family=Caskaidia Mono NF
+label_font_size=8 50% 100
+label_symbols=abcdefghijklmnorstuvwxyz
+
+[mode_floating]
+source=detect
+label_color=#ffe600ff
+label_select_color=#ff7a00ff
+unselectable_bg_color=#000000aa
+selectable_bg_color=#0a1830e0
+selectable_border_color=#00e5ffff
+label_font_family=Caskaidia Mono NF
+label_font_size=12 50% 100
+label_symbols=abcdefghijklmnorstuvwxyz
+
+[mode_bisect]
+label_color=#ffe600ff
+label_font_size=20
+label_font_family=Caskaidia Mono NF
+label_padding=12
+pointer_size=20
+pointer_color=#ff2d2dff
+unselectable_bg_color=#000000aa
+even_area_bg_color=#0a1830c0
+even_area_border_color=#00e5ffff
+odd_area_bg_color=#20103080
+odd_area_border_color=#ff7a00ff
+history_border_color=#888888ff
+
+[mode_split]
+pointer_size=20
+pointer_color=#ff2d2dff
+bg_color=#000000aa
+area_bg_color=#0a1830c0
+vertical_color=#00e5ffff
+horizontal_color=#ffe600ff
+history_border_color=#888888ff
+
+[mode_click]
+button=left

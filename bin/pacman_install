@@ -17,7 +17,6 @@ packages=(
     "pacman:fish"            # Shell
     "pacman:lazygit"         # git overpowered TUI
     "pacman:waybar"          # status bar
-    # "yay:zen-browser-bin"    # Browser
     "pacman:discord"
     "pacman:kitty"           # terminal emulator
     "pacman:hyprlock"        # screen locker
@@ -26,6 +25,8 @@ packages=(
     "pacman:cargo"           # Rust package manager
     "cargo:bluetui"          # Bluetooth TUI client
     "cargo:yazi-build"       # Yazi bluetooth TUI client dependency
+    "yay:opencv4"
+    "yay:wl-kbptr"           # Wayland keyboard pointer
 
     # Dev tools
     "pacman:nvim"            # Code editor
