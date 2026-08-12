@@ -40,8 +40,9 @@
     background-color: alpha(@background, .6);
 }
 
-#custom-update {
+#custom-omarchy-update {
     padding: 3px 5px;
+    border: 1px solid red;
 }
 
 #tray:hover,
@@ -55,7 +56,7 @@
 #window:hover,
 #clock:hover,
 #custom-screenrecording-indicator:hover,
-#custom-update:hover {
+#custom-omarchy-update:hover {
     transition: all .3s ease;
     color: #7aa2f7;
 }
