@@ -69,18 +69,21 @@ in
     enable = true;
     settings = {
       os.edit = "nvim {{filename}}";
-      git.pagers = [
-        {
-          name = "delta";
-          colorArg = "always";
-          pager = "delta --dark --paging=never";
-        }
-        {
-          name = "delta (side-by-side)";
-          colorArg = "always";
-          pager = "delta --dark --paging=never --side-by-side";
-        }
-      ];
+      git = {
+        overrideGpg = true;
+        pagers = [
+          {
+            name = "delta";
+            colorArg = "always";
+            pager = "delta --dark --paging=never";
+          }
+          {
+            name = "delta (side-by-side)";
+            colorArg = "always";
+            pager = "delta --dark --paging=never --side-by-side";
+          }
+        ];
+      };
       gui.showRandomTip = false;
     };
   };
