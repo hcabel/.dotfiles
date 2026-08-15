@@ -11,6 +11,8 @@ let
     toHyprRgba
     stripHash
     alphaHex
+    grubGeometry
+    mix
     ;
 
   # Round a float to `n` decimals for config formats that dislike Nix's
@@ -47,7 +49,8 @@ rec {
         if s.borderGradient != null then
           s.borderGradient
         else
-          with p; [
+          with p;
+          [
             red
             orange
             yellow
@@ -149,83 +152,6 @@ rec {
       env = XCURSOR_SIZE,${toString s.cursor.size}
     '';
 
-  # ── hyprlock ──────────────────────────────────────────────────────────────
-  hyprlock =
-    theme:
-    let
-      t = forApp theme "hyprlock";
-      p = t.palette;
-      s = t.style;
-    in
-    ''
-      # Generated from theme "${theme.name}" — do not edit.
-
-      background {
-        monitor =
-        # Every theme dir ships a wallpaper.jpg — either the theme's own image
-        # or a gradient generated from its palette at build time.
-        path = ~/.local/state/theme/current/wallpaper.jpg
-        color = ${toHyprRgb p.base}
-        blur_passes = ${toString s.blur.passes}
-        blur_size = ${toString s.blur.size}
-        brightness = 0.7
-      }
-
-      animations {
-        enabled = ${lib.boolToString s.animations.enable}
-      }
-
-      input-field {
-        monitor =
-        size = 400, 60
-        position = 0, -80
-        halign = center
-        valign = center
-
-        outline_thickness = ${toString s.borderSize}
-        rounding = ${toString s.rounding}
-
-        inner_color = ${toHyprRgba p.surface s.opacity.panel}
-        outer_color = ${toHyprRgb p.accent}
-        font_color = ${toHyprRgb p.text}
-        check_color = ${toHyprRgb p.accentAlt}
-        fail_color = ${toHyprRgb p.red}
-
-        font_family = ${s.fonts.mono}
-        placeholder_text = <span foreground="##${stripHash p.muted}">Password</span>
-        fail_text = <span foreground="##${stripHash p.red}">$FAIL ($ATTEMPTS)</span>
-
-        fade_on_empty = false
-        shadow_passes = 0
-      }
-
-      label {
-        monitor =
-        text = $TIME
-        color = ${toHyprRgb p.text}
-        font_size = 96
-        font_family = ${s.fonts.sans}
-        position = 0, 120
-        halign = center
-        valign = center
-      }
-
-      label {
-        monitor =
-        text = cmd[update:60000] date +"%A, %d %B"
-        color = ${toHyprRgb p.subtle}
-        font_size = 20
-        font_family = ${s.fonts.sans}
-        position = 0, 40
-        halign = center
-        valign = center
-      }
-
-      auth {
-        fingerprint:enabled = true
-      }
-    '';
-
   # ── Ghostty ───────────────────────────────────────────────────────────────
   ghostty =
     theme:
@@ -287,6 +213,12 @@ rec {
       primaryContainer = p.overlay;
 
       secondary = p.accentAlt;
+      # DMS falls back to surfaceContainerHigh for these, which collapses the
+      # accent ramp into one flat colour. Naming them keeps the pink and
+      # purple distinguishable on chips and tiles.
+      secondaryContainer = p.overlay;
+      tertiary = p.magenta;
+      tertiaryContainer = p.overlay;
       surfaceTint = p.accent;
 
       surface = p.surface;
@@ -296,15 +228,136 @@ rec {
       surfaceContainer = p.surface;
       surfaceContainerHigh = p.overlay;
       surfaceContainerHighest = p.overlay;
+      # Only read by the matugen hand-off that themes GTK/Qt. Left unset they
+      # default to surface/background, which flattens the elevation ramp for
+      # every app that isn't converted yet.
+      surfaceContainerLow = p.base;
+      surfaceContainerLowest = p.base;
+      surfaceBright = p.overlay;
+      surfaceDim = p.base;
 
       background = p.base;
       backgroundText = p.text;
 
       outline = p.muted;
+      outlineVariant = p.borderInactive;
 
       error = p.red;
       warning = p.orange;
       info = p.blue;
+      success = p.green;
+    };
+
+  # ── DankMaterialShell: settings.json fragment ─────────────────────────────
+  # The part of DMS's settings the theme owns: the bar's layout and geometry,
+  # and the handful of appearance keys that are colour- or shape-adjacent.
+  #
+  # Everything here is *merged over* whatever DMS has written rather than
+  # replacing the file, so the settings UI keeps working for the many keys the
+  # theme has no opinion about. See `theme-apply` in modules/home/theme.
+  dmsSettings =
+    theme:
+    let
+      t = forApp theme "dms";
+      s = t.style;
+      b = s.bar;
+
+      # DMS has no bar-height setting. It derives thickness from innerPadding:
+      #
+      #   widgetThickness = max(20, 26 + p * 0.6)
+      #   thickness       = max(widgetThickness + p + 4, 48 - 4 - (8 - p))
+      #                   = max(30 + 1.6p, 36 + p)          [for p >= 0]
+      #
+      # so the second term wins below p = 10 and the first above it. Inverting
+      # each branch lets a theme state the height it wants in px and get it.
+      #   — DankBarWindow.qml, effectiveBarThickness
+      innerPaddingFor =
+        h:
+        let
+          p = if h <= 46 then h - 36 else builtins.floor ((h - 30) / 1.6 + 0.5);
+        in
+        if p < 0 then 0 else p;
+    in
+    builtins.toJSON {
+      barConfigs = [
+        {
+          id = "default";
+          name = "Main Bar";
+          enabled = true;
+          position = 0; # top
+
+          # The design's three groups: identity on the left, workspaces
+          # centred, status on the right.
+          leftWidgets = [
+            "launcherButton"
+            "focusedWindow"
+          ];
+          centerWidgets = [ "workspaceSwitcher" ];
+          rightWidgets = [
+            "systemTray"
+            "cpuUsage"
+            "memUsage"
+            # Carries the network / volume / bluetooth glyph cluster that the
+            # design draws as one pill.
+            "controlCenterButton"
+            "battery"
+            "clock"
+            "notificationButton"
+            "powerMenuButton"
+          ];
+
+          innerPadding = innerPaddingFor b.height;
+          spacing = b.edgeGap;
+          widgetPadding = b.widgetPadding;
+
+          transparency = b.transparency;
+          widgetTransparency = b.widgetTransparency;
+
+          gothCornersEnabled = b.gothCorners;
+          gothCornerRadiusOverride = true;
+          gothCornerRadiusValue = b.cornerRadius;
+
+          # No gap between the bar and its dropdowns — they have to touch for
+          # the fillets to join them into one shape.
+          popupGapsAuto = false;
+          popupGapsManual = 0;
+        }
+      ];
+
+      popupTransparency = s.opacity.panel;
+      dockTransparency = s.opacity.panel;
+      cornerRadius = s.rounding;
+
+      fontFamily = s.fonts.sans;
+      monoFontFamily = s.fonts.mono;
+
+      # DMS regenerates GTK/Qt through matugen from the colours above once the
+      # session is up, which is the hand-off home/default.nix is written
+      # around. It owns ~/.config/gtk-*/gtk.css outright, so there is no second
+      # Nix-generated stylesheet to compete with it.
+      gtkThemingEnabled = true;
+      qtThemingEnabled = true;
+
+      # ── not theme-derived ─────────────────────────────────────────────────
+      # These two aren't about the theme at all; they're here because this file
+      # is the one channel Nix has into DMS's settings. Both exist to stop DMS
+      # putting up its own lock screen, now that the lock is ours
+      # (modules/nixos/login.nix).
+      #
+      # DMS otherwise reacts to logind's Lock signal and locks in-process, which
+      # would race our lock client for the same ext-session-lock protocol.
+      # hypridle already listens for that signal and runs `saturn-lock`.
+      loginctlLockIntegration = false;
+      # And its power menu's lock button calls its lock directly rather than
+      # going through logind, so it would be the one path showing a different
+      # screen from every other. Dropped; `$mod+L` locks instead.
+      powerMenuActions = [
+        "reboot"
+        "logout"
+        "poweroff"
+        "suspend"
+        "restart"
+      ];
     };
 
   # ── fish ──────────────────────────────────────────────────────────────────
@@ -504,9 +557,7 @@ rec {
       t = forApp theme "nvim";
       p = t.palette;
       s = t.style;
-      entries = lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (k: v: "    ${k} = \"${v}\",") p
-      );
+      entries = lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "    ${k} = \"${v}\",") p);
     in
     ''
       -- Generated from theme "${theme.name}" — do not edit.
@@ -522,33 +573,27 @@ rec {
       }
     '';
 
-  # ── bat ───────────────────────────────────────────────────────────────────
-  bat =
-    theme:
-    let
-      t = forApp theme "bat";
-    in
-    ''
-      --theme=${if t.polarity == "dark" then "ansi" else "GitHub"}
-      --style=numbers,changes
-      --italic-text=always
-    '';
-
   # ── delta (git pager) ─────────────────────────────────────────────────────
   delta =
     theme:
     let
       t = forApp theme "delta";
       p = t.palette;
+      # Whole-line background: mostly base, just tinted — dark and muted so
+      # syntax-highlighted text stays readable on top of it.
+      lineBg = c: mix c p.base 0.72;
+      # Changed-word background: mostly the colour, lifted toward text —
+      # lighter than the line so the exact edit stands out from it.
+      wordBg = c: mix c p.text 0.30;
     in
     ''
       # Generated from theme "${theme.name}" — do not edit.
       [delta]
           syntax-theme = ansi
-          minus-style = normal "${p.red}"
-          minus-emph-style = normal "${p.red}"
-          plus-style = syntax "${p.green}"
-          plus-emph-style = syntax "${p.green}"
+          minus-style = syntax "${lineBg p.red}"
+          minus-emph-style = "${p.base}" "${wordBg p.red}"
+          plus-style = syntax "${lineBg p.green}"
+          plus-emph-style = "${p.base}" "${wordBg p.green}"
           line-numbers-zero-style = "${p.muted}"
           line-numbers-left-style = "${p.muted}"
           line-numbers-right-style = "${p.muted}"
@@ -558,43 +603,228 @@ rec {
           hunk-header-decoration-style = "${p.muted}" box
     '';
 
-  # ── GTK ───────────────────────────────────────────────────────────────────
-  # DMS themes GTK via matugen, but it only runs after login. This gives GTK a
-  # correct palette immediately and covers the case where matugen is off.
-  gtk =
+  # ── login surface ─────────────────────────────────────────────────────────
+  # Read by modules/home/shell/login. That surface is QML rather than a config
+  # file, so it gets the theme as data and does its own layout — which is what
+  # lets one component be both the greeter and the lock screen.
+  #
+  # The wallpaper is deliberately *not* named here: this file is generated
+  # before the theme derivation exists, so it can't know its own store path.
+  # The QML resolves `wallpaper.jpg` as a sibling of this file instead, which
+  # also means the lock screen follows `theme set` through the `current`
+  # symlink for free.
+  loginTheme =
     theme:
     let
-      t = forApp theme "gtk";
+      t = forApp theme "login";
       p = t.palette;
       s = t.style;
     in
-    ''
-      /* Generated from theme "${theme.name}" — do not edit. */
-      @define-color theme_bg_color ${p.base};
-      @define-color theme_base_color ${p.surface};
-      @define-color theme_fg_color ${p.text};
-      @define-color theme_text_color ${p.text};
-      @define-color theme_selected_bg_color ${p.accent};
-      @define-color theme_selected_fg_color ${p.base};
-      @define-color borders ${p.muted};
-      @define-color warning_color ${p.orange};
-      @define-color error_color ${p.red};
-      @define-color success_color ${p.green};
-      @define-color accent_color ${p.accent};
-      @define-color accent_bg_color ${p.accent};
-      @define-color accent_fg_color ${p.base};
-      @define-color window_bg_color ${p.base};
-      @define-color window_fg_color ${p.text};
-      @define-color view_bg_color ${p.surface};
-      @define-color view_fg_color ${p.text};
-      @define-color headerbar_bg_color ${p.surface};
-      @define-color headerbar_fg_color ${p.text};
-      @define-color popover_bg_color ${p.overlay};
-      @define-color popover_fg_color ${p.text};
-      @define-color card_bg_color ${p.surface};
-      @define-color card_fg_color ${p.text};
+    builtins.toJSON {
+      inherit (t) name polarity;
 
-      window, .background { border-radius: ${toString s.rounding}px; }
+      colors = {
+        inherit (p)
+          base
+          surface
+          overlay
+          muted
+          subtle
+          text
+          accent
+          accentAlt
+          red
+          green
+          cyan
+          magenta
+          ;
+      };
+
+      fonts = {
+        inherit (s.fonts) mono sans;
+        size = s.fonts.size;
+      };
+
+      rounding = s.rounding;
+      panelOpacity = s.opacity.panel;
+    };
+
+  # ── GRUB ──────────────────────────────────────────────────────────────────
+  # A gfxmenu theme for the generation menu. The images it references are cut
+  # by modules/nixos/bootloader.nix from this same theme's palette.
+  #
+  # Two structural notes, both learned the hard way from GRUB's own themes:
+  #
+  #  * boot_menu must stay a top-level component. Nesting it in a vbox breaks
+  #    item highlighting — kdePackages.breeze-grub carries the same warning.
+  #  * Coordinates only parse integer percentages (`7%`, `50%-200`), so the
+  #    design's pixel offsets are rounded to whole percent of a 1920x1080
+  #    screen, which is the mode bootloader.nix pins.
+  grub =
+    theme:
+    let
+      t = forApp theme "grub";
+      p = t.palette;
+      s = t.style;
+      m = s.bootMenu;
+
+      # theme.txt's numbers are not the design's numbers — see grubGeometry.
+      inherit (grubGeometry m)
+        corner
+        itemHeight
+        itemSpacing
+        progressSlot
+        terminal
+        ;
+    in
+    assert lib.assertMsg (itemHeight > 0) ''
+      Theme "${theme.name}": bootMenu.itemHeight (${toString m.itemHeight}) must
+      exceed twice the corner slice (${toString (2 * corner)}), or GRUB has no
+      room left for the row's text.
+    '';
+    ''
+      # Generated from theme "${theme.name}" — do not edit.
+      # Source: modules/home/theme/themes/${theme.name}.nix
+
+      title-text: ""
+      desktop-image: "background.png"
+      desktop-image-scale-method: "crop"
+      desktop-color: "${p.base}"
+      message-color: "${p.subtle}"
+      message-bg-color: "${p.surface}"
+      terminal-font: "${s.fonts.mono} Regular 14"
+
+      # gfxterm's window, stated rather than defaulted, because bootloader.nix
+      # crops the background to exactly this rect so the window is invisible
+      # while the kernel loads. Changing it here without changing the crop puts
+      # a misaligned copy of the wallpaper on screen.
+      terminal-left: "${toString terminal.x}"
+      terminal-top: "${toString terminal.y}"
+      terminal-width: "${toString terminal.width}"
+      terminal-height: "${toString terminal.height}"
+      terminal-border: "0"
+
+      # The monogram and hostname, on the same left column as the splash and
+      # the greeter so the three screens don't shift under each other.
+      + image {
+        left = 7%
+        top = 26%
+        width = 86
+        height = 72
+        file = "logo.png"
+      }
+
+      + label {
+        left = 12%
+        top = 29%
+        width = 20%
+        text = "${lib.toUpper theme.name}"
+        color = "${p.subtle}"
+        font = "${s.fonts.sans} Regular 12"
+      }
+
+      + label {
+        left = 7%
+        top = 34%
+        width = 40%
+        text = "SELECT GENERATION"
+        color = "${p.muted}"
+        font = "${s.fonts.sans} Regular 12"
+      }
+
+      + boot_menu {
+        left = 7%
+        top = 38%
+        width = 35%
+        height = 34%
+
+        # gfxmenu reserves space for an icon per entry even when none is set,
+        # so both dimensions go to zero to reclaim it.
+        icon_width = 0
+        icon_height = 0
+        # With no icon, this is simply how far the label sits from the card's
+        # inner edge. The card's own left pad is the corner slice, so the text
+        # ends up ${toString (corner + 4)}px from the card edge.
+        item_icon_space = 4
+
+        item_height = ${toString itemHeight}
+        item_spacing = ${toString itemSpacing}
+        item_padding = ${toString m.itemPadding}
+
+        item_font = "${s.fonts.sans} Regular 16"
+        selected_item_font = "${s.fonts.sans} Regular 16"
+        item_color = "${p.subtle}"
+        selected_item_color = "${p.text}"
+
+        item_pixmap_style = "item_*.png"
+        selected_item_pixmap_style = "select_*.png"
+
+        scrollbar = false
+      }
+
+      # ASCII only, deliberately. The design writes this line with ↑↓ and ↵,
+      # and Inter has all three, but grub-mkfont's output renders them as
+      # missing-glyph boxes — verified by booting the theme, not by inspecting
+      # the font. Words beat tofu on a screen shown for three seconds.
+      + label {
+        left = 7%
+        top = 74%
+        width = 40%
+        text = "arrows move  -  enter boots  -  e edits cmdline  -  c console"
+        color = "${p.muted}"
+        font = "${s.fonts.sans} Regular 11"
+      }
+
+      # The autoboot countdown, as the design's thin accent rule. The component
+      # is ${toString progressSlot}px tall because it cannot be less; the rule itself is
+      # ${toString m.progressHeight}px, drawn inside transparent pixmaps. highlight_overlay makes the
+      # fill share the track's origin instead of being inset inside it, so the
+      # two bands line up exactly.
+      + progress_bar {
+        id = "__timeout__"
+        left = 7%
+        top = 78%
+        width = 22%
+        height = ${toString progressSlot}
+        show_text = false
+        bar_style = "progress_track_*.png"
+        highlight_style = "progress_fill_*.png"
+        highlight_overlay = true
+
+        # Only reached if the pixmaps fail to load, in which case GRUB falls
+        # back to filling the whole component as a flat rect.
+        fg_color = "${p.accent}"
+        bg_color = "${p.borderInactive}"
+        border_color = "${p.borderInactive}"
+      }
+    '';
+
+  # ── logo ──────────────────────────────────────────────────────────────────
+  # The "hc" monogram, in the theme's own accent ramp: an H drawn as a filled
+  # path, and a C as a stroked arc. Every theme ships one so anything that
+  # wants to brand a screen — the boot splash today — can rasterise it at
+  # whatever size it needs instead of carrying a fixed-size bitmap.
+  logo =
+    theme:
+    let
+      t = forApp theme "logo";
+      p = t.palette;
+    in
+    ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!-- Generated from theme "${theme.name}" — do not edit. -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100">
+        <defs>
+          <linearGradient id="mark" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="${p.accent}"/>
+            <stop offset="100%" stop-color="${p.accentAlt}"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#mark)"
+              d="M20 18 L32 18 L32 44 L54 44 L54 18 L66 18 L66 82 L54 82 L54 56 L32 56 L32 82 L20 82 Z"/>
+        <path fill="none" stroke="${p.text}" stroke-width="12"
+              d="M100 34a24 24 0 1 0 0 32"/>
+      </svg>
     '';
 
   # ── metadata ──────────────────────────────────────────────────────────────

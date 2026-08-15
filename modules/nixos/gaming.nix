@@ -38,11 +38,11 @@
   };
 
   # Stream games from this machine to a Moonlight client.
-  services.sunshine = {
-    enable = true;
-    openFirewall = true;
-    capSysAdmin = true; # required for Wayland capture
-  };
+  # services.sunshine = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   capSysAdmin = true; # required for Wayland capture
+  # };
 
   # Steam's 32-bit stack and Proton both want a generous file descriptor
   # limit; the default trips some titles.

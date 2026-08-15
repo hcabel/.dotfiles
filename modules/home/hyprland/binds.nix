@@ -37,82 +37,89 @@ in
     "$terminal" = "${pkgs.ghostty}/bin/ghostty";
     "$browser" = "firefox";
 
-    bind =
-      [
-        # ── launching ──────────────────────────────────────────────────────
-        "$mod, return, exec, $terminal --working-directory=$(${terminalCwd})"
-        "$mod SHIFT, return, exec, $terminal"
-        "$mod SHIFT, F, exec, $terminal -e ${pkgs.yazi}/bin/yazi"
-        "$mod, B, exec, $browser"
-        "$mod SHIFT, B, exec, $browser --private-window"
+    bind = [
+      # ── launching ──────────────────────────────────────────────────────
+      "$mod, return, exec, $terminal --working-directory=$(${terminalCwd})"
+      "$mod SHIFT, return, exec, $terminal"
+      "$mod SHIFT, F, exec, $terminal -e ${pkgs.yazi}/bin/yazi"
+      "$mod, B, exec, $browser"
+      "$mod SHIFT, B, exec, $browser --private-window"
 
-        # ── shell (DMS replaces rofi / swaync / wlogout / waybar) ──────────
-        "$mod, space, exec, dms ipc call spotlight toggle"
-        "$mod, N, exec, dms ipc call notifications toggle"
-        "$mod, U, exec, dms ipc call control-center toggle"
-        "$mod ALT, V, exec, dms ipc call clipboard toggle"
-        "$mod, Escape, exec, dms ipc call powermenu toggle"
-        "$mod, O, exec, dms ipc call dash open overview"
-        "$mod SHIFT, P, exec, dms ipc call processlist toggle"
-        "$mod, slash, exec, dms ipc call hypr toggleBinds"
-        "$mod, grave, exec, dms ipc call hypr toggleOverview"
+      # ── shell (DMS replaces rofi / swaync / wlogout / waybar) ──────────
+      "$mod, space, exec, dms ipc call spotlight toggle"
+      "$mod, N, exec, dms ipc call notifications toggle"
+      "$mod, U, exec, dms ipc call control-center toggle"
+      "$mod ALT, V, exec, dms ipc call clipboard toggle"
+      "$mod, Escape, exec, dms ipc call powermenu toggle"
+      "$mod, O, exec, dms ipc call dash open overview"
+      "$mod SHIFT, P, exec, dms ipc call processlist toggle"
+      "$mod, slash, exec, dms ipc call hypr toggleBinds"
+      "$mod, grave, exec, dms ipc call hypr toggleOverview"
 
-        # ── keyboard pointer control ───────────────────────────────────────
-        "$mod, S, exec, ${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=floating,click -o mode_floating.source=detect"
-        "$mod SHIFT, S, exec, ${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=tile,click"
+      # ── keyboard pointer control ───────────────────────────────────────
+      "$mod, S, exec, ${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=floating,click -o mode_floating.source=detect"
+      "$mod SHIFT, S, exec, ${pkgs.wl-kbptr}/bin/wl-kbptr -o modes=tile,click"
 
-        # ── window management ──────────────────────────────────────────────
-        "$mod, W, killactive"
-        "$mod, F, togglefloating"
-        ", F11, fullscreen, 0"
+      # Goes through logind so hypridle stays the single owner of the lock
+      # command, and every route to the lock screen ends up in one place.
+      "$mod, L, exec, loginctl lock-session"
 
-        # focus
-        "$mod, LEFT, movefocus, l"
-        "$mod, RIGHT, movefocus, r"
-        "$mod, UP, movefocus, u"
-        "$mod, DOWN, movefocus, d"
+      # ── window management ──────────────────────────────────────────────
+      "$mod, W, killactive"
+      "$mod, F, togglefloating"
+      ", F11, fullscreen, 0"
 
-        # swap
-        "$mod ALT, LEFT, swapwindow, l"
-        "$mod ALT, RIGHT, swapwindow, r"
-        "$mod ALT, UP, swapwindow, u"
-        "$mod ALT, DOWN, swapwindow, d"
+      # focus
+      "$mod, LEFT, movefocus, l"
+      "$mod, RIGHT, movefocus, r"
+      "$mod, UP, movefocus, u"
+      "$mod, DOWN, movefocus, d"
 
-        # resize — by keysym, not scancode: this deliberately wants the
-        # literal +/- characters (so on a US layout, grow is $mod+Shift+=
-        # since that's what produces "+"), not just "whatever key sits at
-        # this physical position".
-        "$mod, PLUS, resizeactive, 100 0"
-        "$mod, MINUS, resizeactive, -100 0"
-        "$mod SHIFT, PLUS, resizeactive, 0 100"
-        "$mod SHIFT, MINUS, resizeactive, 0 -100"
+      # swap
+      "$mod ALT, LEFT, swapwindow, l"
+      "$mod ALT, RIGHT, swapwindow, r"
+      "$mod ALT, UP, swapwindow, u"
+      "$mod ALT, DOWN, swapwindow, d"
 
-        # ── groups ─────────────────────────────────────────────────────────
-        "$mod, G, togglegroup"
-        "$mod ALT, G, moveoutofgroup"
-        "$mod ALT, LEFT, moveintogroup, l"
-        "$mod ALT, RIGHT, moveintogroup, r"
-        "$mod ALT, UP, moveintogroup, u"
-        "$mod ALT, DOWN, moveintogroup, d"
-        "$mod ALT, TAB, changegroupactive, f"
-        "$mod ALT SHIFT, TAB, changegroupactive, b"
-        "$mod CTRL, LEFT, changegroupactive, b"
-        "$mod CTRL, RIGHT, changegroupactive, f"
-      ]
-      ++ workspaceBinds
-      ++ (lib.genList (i: "$mod ALT, code:${toString (i + 10)}, changegroupactive, ${toString (i + 1)}") 5)
-      ++ [
-        # ── screenshots (F6 family, as you had them) ───────────────────────
-        "$mod, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m output --clipboard-only"
-        "$mod SHIFT, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m region --clipboard-only"
-        "ALT, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m window --clipboard-only"
-        "$mod CTRL, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o ~/Pictures/Screenshots"
-      ];
+      # Resize is in `binde` below, so that holding the key repeats.
 
-    # Repeating binds (held keys)
+      # ── groups ─────────────────────────────────────────────────────────
+      # $mod ALT + arrows is swapwindow, just above. It used to be listed here
+      # as moveintogroup too, which Hyprland ignored — the first bind for a
+      # chord wins — so those four lines never did anything.
+      "$mod, G, togglegroup"
+      "$mod ALT, G, moveoutofgroup"
+      "$mod ALT, TAB, changegroupactive, f"
+      "$mod ALT SHIFT, TAB, changegroupactive, b"
+      "$mod CTRL, LEFT, changegroupactive, b"
+      "$mod CTRL, RIGHT, changegroupactive, f"
+    ]
+    ++ workspaceBinds
+    ++ (lib.genList (
+      i: "$mod ALT, code:${toString (i + 10)}, changegroupactive, ${toString (i + 1)}"
+    ) 5)
+    ++ [
+      # ── screenshots (F6 family, as you had them) ───────────────────────
+      "$mod, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m output --clipboard-only"
+      "$mod SHIFT, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m region --clipboard-only"
+      "ALT, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m window --clipboard-only"
+      "$mod CTRL, F6, exec, ${pkgs.hyprshot}/bin/hyprshot -m region -o ~/Pictures/Screenshots"
+    ];
+
+    # Repeating binds (held keys).
+    #
+    # Resize is only here, never in `bind` as well: a chord listed in both is
+    # taken by whichever registers first, and the non-repeating one winning is
+    # exactly what `binde` exists to avoid.
+    #
+    # By keysym, not scancode: this deliberately wants the literal +/-
+    # characters (so on a US layout, grow is $mod+Shift+= since that's what
+    # produces "+"), not just "whatever key sits at this physical position".
     binde = [
       "$mod, PLUS, resizeactive, 100 0"
       "$mod, MINUS, resizeactive, -100 0"
+      "$mod SHIFT, PLUS, resizeactive, 0 100"
+      "$mod SHIFT, MINUS, resizeactive, 0 -100"
     ];
 
     # Media / hardware keys — routed through DMS so they render its OSD.
@@ -133,7 +140,7 @@ in
       ", XF86AudioPlay, exec, dms ipc call mpris play"
       ", XF86AudioPause, exec, dms ipc call mpris pause"
       ", XF86Sleep, exec, systemctl suspend"
-      ", switch:on:Lid Switch, exec, dms ipc call lock lock"
+      ", switch:on:Lid Switch, exec, loginctl lock-session"
     ];
 
     # Mouse

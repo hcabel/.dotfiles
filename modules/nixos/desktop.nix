@@ -10,8 +10,6 @@
     withUWSM = true;
   };
 
-  programs.hyprlock.enable = true;
-
   # ── shell ──────────────────────────────────────────────────────────────────
   programs.dms-shell = {
     enable = true;
@@ -26,12 +24,9 @@
   };
 
   # ── login screen ───────────────────────────────────────────────────────────
-  services.displayManager.dms-greeter = {
-    enable = true;
-    compositor.name = "hyprland";
-    configHome = "/home/hcabel";
-    logs.save = true;
-  };
+  # In modules/nixos/login.nix — a custom quickshell greeter sharing one QML
+  # component with the lock screen. DMS's greeter is deliberately not used; its
+  # layout is fixed and only its colours are themeable.
 
   # ── portals ────────────────────────────────────────────────────────────────
   xdg.portal = {
@@ -46,7 +41,13 @@
 
   # ── session services ───────────────────────────────────────────────────────
   security.polkit.enable = true;
-  services.hypridle.enable = true;
+
+  # hypridle is deliberately *not* enabled here. The home-manager module in
+  # modules/home/lock.nix owns it: it writes the config this machine actually
+  # uses and defines the user unit, and a unit in ~/.config/systemd/user
+  # shadows the one this module would stage in /etc/systemd/user anyway. The
+  # NixOS module would also pull in hyprlock, which this setup replaces with
+  # its own lock screen (modules/nixos/login.nix).
 
   # Polkit agent, so privilege prompts render as a themed dialog rather than
   # failing silently.
@@ -64,7 +65,9 @@
   };
 
   services.gnome.gnome-keyring.enable = true;
-  security.pam.services.dms-greeter.enableGnomeKeyring = true;
+  # The greeter authenticates through greetd's own PAM stack; the lock screen's
+  # is set up alongside it in modules/nixos/login.nix.
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   services.udisks2.enable = true; # removable media in the file manager
   services.gvfs.enable = true;
@@ -83,4 +86,3 @@
     vesktop # Alternate client for Discord
   ];
 }
-

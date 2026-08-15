@@ -1,22 +1,23 @@
-{ config, ... }:
+{ ... }:
 
-let
-  themeDir = "${config.xdg.stateHome}/theme/current";
-in
+# Idle and lock behaviour.
+#
+# The lock screen is our own — the same QML the greeter draws, driven by PAM
+# through ext-session-lock-v1, so it is a real lock rather than an overlay and
+# the two screens cannot drift apart. See modules/nixos/login.nix, which
+# provides the `saturn-lock` command called below; hyprlock is not installed.
+#
+# `loginctl lock-session` still works as the way to ask for a lock: hypridle
+# subscribes to logind's Lock signal and runs `lock_cmd` in response. So the
+# timeout and before-sleep entries below go through logind, and every other
+# caller (the lid switch, a keybind) can too.
+
 {
-  # hyprlock's whole appearance is themed, so the config is just a source line.
-  programs.hyprlock = {
-    enable = true;
-    extraConfig = ''
-      source = ${themeDir}/hyprlock.conf
-    '';
-  };
-
   services.hypridle = {
     enable = true;
     settings = {
       general = {
-        lock_cmd = "pidof hyprlock || hyprlock";
+        lock_cmd = "saturn-lock";
         before_sleep_cmd = "loginctl lock-session";
         after_sleep_cmd = "hyprctl dispatch dpms on";
         inhibit_sleep = 3; # wait until the screen is actually locked

@@ -97,15 +97,6 @@
       style.opacity.panel = 0.80;
     };
 
-    # The lock screen is the one place transparency is actively harmful.
-    hyprlock = {
-      style.opacity = {
-        active = 1.0;
-        panel = 1.0;
-      };
-      style.blur.passes = 3;
-    };
-
     # Keyboard pointer labels must stay maximally readable over any content,
     # so they opt out of the palette's softer foreground entirely.
     wl-kbptr = {

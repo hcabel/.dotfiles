@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  themeDir = "${config.xdg.stateHome}/theme/current";
+  themeDir = config.hcabel.theme.currentDir;
 in
 {
   programs.git = {
@@ -46,6 +46,10 @@ in
         autoupdate = true;
       };
 
+      # delta's colours come from the active theme, so `theme set` re-themes
+      # diffs with no rebuild. This used to point at a checked-in delta.conf in
+      # the repo, which no longer exists — and git ignores a missing include
+      # silently, so the generated file was never read by anything.
       include.path = "${themeDir}/delta.conf";
     };
   };
@@ -88,8 +92,7 @@ in
     };
   };
 
-  home.shellAliases.lazygit =
-    "lazygit -ucf ${config.xdg.configHome}/lazygit/config.yml,${themeDir}/lazygit.json";
+  home.shellAliases.lazygit = "lazygit -ucf ${config.xdg.configHome}/lazygit/config.yml,${themeDir}/lazygit.json";
 
   home.packages = with pkgs; [
     gh

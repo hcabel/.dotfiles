@@ -10,7 +10,7 @@
 # own the Lua. The theme is exposed as a Lua table the config can require.
 
 let
-  themeDir = "${config.xdg.stateHome}/theme/current";
+  themeDir = config.hcabel.theme.currentDir;
   nvimConfigDir = "${config.xdg.configHome}/nvim";
   nvimConfigRepo = "https://github.com/hcabel/neovim-config.git";
 in
@@ -58,8 +58,7 @@ in
   # Palette bridge: your nvim config can pick the desktop theme up with
   #   local theme = dofile(vim.fn.expand("~/.local/state/theme/current/nvim.lua"))
   # A convenience symlink keeps that path stable and short.
-  xdg.configFile."nvim/theme.lua".source =
-    config.lib.file.mkOutOfStoreSymlink "${themeDir}/nvim.lua";
+  xdg.configFile."nvim/theme.lua".source = config.lib.file.mkOutOfStoreSymlink "${themeDir}/nvim.lua";
 
   home.sessionVariables.EDITOR = "nvim";
 

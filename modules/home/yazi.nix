@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  themeDir = "${config.xdg.stateHome}/theme/current";
+  themeDir = config.hcabel.theme.currentDir;
 in
 {
   programs.yazi = {

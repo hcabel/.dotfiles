@@ -18,13 +18,13 @@
     # never drift apart.
     package = null;
     portalPackage = null;
-    # Originally left this to uwsm. In practice dms-greeter launches Hyprland
-    # via its own `start-hyprland` binary, bypassing uwsm entirely on at
-    # least some boots — when that happens nothing ever starts
-    # graphical-session.target, so dms/hypridle/hyprpolkitagent/sunshine
-    # (everything bound to it) silently never come up. Letting Hyprland's
-    # own exec-once announce readiness works regardless of which launcher
-    # got it running.
+    # Redundant with uwsm, and kept anyway. Everything the session needs —
+    # dms, hypridle, hyprpolkitagent, sunshine — is bound to
+    # graphical-session.target, and if whatever launched Hyprland didn't go
+    # through uwsm then nothing ever starts that target and all of it silently
+    # stays down. Letting Hyprland's own exec-once announce readiness makes the
+    # session come up regardless of how it was started, which is worth more
+    # than avoiding a duplicate `systemctl start` of an already-active target.
     systemd.enable = true;
 
     # Hyprland 0.55 deprecated hyprlang in favour of Lua, and home-manager
@@ -141,8 +141,12 @@
       ];
 
       # ── autostart ────────────────────────────────────────────────────────
+      # hypridle is not here: it is a systemd user service, declared once in
+      # modules/home/lock.nix (which also owns its config) and bound to
+      # graphical-session.target. This list used to start it a second time from
+      # a path that does not exist — hypridle ships in its own package, not in
+      # Hyprland's — so the exec silently failed on every login.
       exec-once = [
-        "${pkgs.hyprland}/bin/hypridle"
         "[workspace 4 silent] firefox"
         "[workspace 5 silent] ${pkgs.ghostty}/bin/ghostty"
         "[workspace 7 silent] ${pkgs.vesktop}/bin/vesktop"
@@ -152,7 +156,7 @@
     # The theme supplies colours, gaps, rounding, blur, shadows, animations
     # and the cursor. It is the last thing sourced so it always wins.
     extraConfig = lib.mkAfter ''
-      source = ${config.xdg.stateHome}/theme/current/hyprland.conf
+      source = ${config.hcabel.theme.currentDir}/hyprland.conf
     '';
   };
 }

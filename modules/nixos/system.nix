@@ -1,36 +1,38 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   # ── boot ───────────────────────────────────────────────────────────────────
+  # The bootloader lives in modules/nixos/bootloader.nix, and the splash it
+  # hands off to in modules/nixos/plymouth.nix. What's left here is the kernel
+  # and the noise floor.
   boot = {
-    loader = {
-      systemd-boot = {
-        enable = true;
-        # Keep the boot menu readable — one entry per generation adds up fast
-        # once you're rebuilding several times a day.
-        configurationLimit = 10;
-      };
-      efi.canTouchEfiVariables = true;
-      timeout = 3;
-    };
-
     # Raptor Lake and the 4060 both want a recent kernel.
     kernelPackages = pkgs.linuxPackages_latest;
 
     kernelParams = [
       "quiet"
-      "splash"
+      # udev is the loudest thing in the initrd.
+      "rd.udev.log_level=3"
+      "udev.log_priority=3"
+      # Stops the text-mode cursor blinking in the corner of the splash.
+      "vt.global_cursor_default=0"
+
       # Keeps the dGPU's video memory across suspend, which is what stops the
       # "black screen after resume" failure on NVIDIA laptops.
       "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
     ];
 
-    plymouth.enable = true;
+    # `splash` is not listed above on purpose — the plymouth module adds it
+    # itself, and naming it twice is how it ended up duplicated on the kernel
+    # command line.
+
+    # Both of these default to being chatty, and both draw over the splash.
+    # consoleLogLevel is what puts `loglevel=` on the command line, so it is
+    # named here rather than in kernelParams above — `quiet` alone still leaves
+    # it at 4, which is enough for driver chatter to punch through. 3 keeps
+    # actual errors visible.
+    initrd.verbose = false;
+    consoleLogLevel = 3;
   };
 
   # 16 GB with no swap is tight once a game and a browser are both open.

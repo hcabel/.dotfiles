@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -11,7 +11,6 @@
     ../modules/home/yazi.nix
     ../modules/home/nvim.nix
     ../modules/home/lock.nix
-    ../modules/home/dms.nix
   ];
 
   home = {
@@ -22,7 +21,7 @@
 
   # Which curated theme a fresh machine starts on. Switching at runtime with
   # `theme set <name>` does not require changing this.
-  hcabel.theme.default = "glass";
+  hcabel.theme.default = "saturn";
 
   xdg.enable = true;
 
